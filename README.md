@@ -12,9 +12,8 @@
 
 <!-- Live Telemetry & Threat Map Preview -->
 <p align="center">
-  <video src="assets/video.mp4" width="100%" autoplay loop muted playsinline controls></video>
+  <video src="https://github.com/user-attachments/assets/29d4fc73-8da0-4e40-982d-1783437e0283" width="100%" autoplay loop muted playsinline controls></video>
 </p>
-
 ---
 
 ## Executive Summary & Operational Use Cases
