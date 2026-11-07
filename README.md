@@ -113,8 +113,7 @@ SentinelTrap-Enterprise/
 ├── requirements.txt        # Pinned production Python dependencies
 ├── run_demo.bat            # One-click Windows environment bootstrapper & process orchestrator
 ├── README.md               # Enterprise technical documentation
-├── assets/
-│   └── video.mp4           # High-density operational video showcase
+|
 ├── static/
 │   ├── logo.png            # Local brand mark asset (with automatic inline SVG fallback)
 │   ├── styles.css          # Slate/Zinc dark-mode styling & high-contrast status badges
