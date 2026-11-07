@@ -12,8 +12,9 @@
 
 <!-- Live Telemetry & Threat Map Preview -->
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/29d4fc73-8da0-4e40-982d-1783437e0283" width="100%" autoplay loop muted playsinline controls></video>
+  <img src="assets/video.gif" alt="SentinelTrap Live Telemetry Demo" width="100%">
 </p>
+
 ---
 
 ## Executive Summary & Operational Use Cases
