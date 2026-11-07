@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelTrap — Threat Intelligence Honeypot &amp; Global Attack Surface Observer</title>
+  <!-- Tailwind CSS via Official CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Precision Enterprise Typography: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="min-h-screen bg-[#09090b] text-slate-100 flex flex-col selection:bg-orange-500/30 selection:text-orange-200">
+
+  <!-- Top Enterprise Navigation Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-800/90 bg-[#09090b]/95 backdrop-blur">
+    <div class="max-w-[1600px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Identity & Local Logo Asset with Automatic Clean SVG Fallback -->
+      <div class="flex items-center gap-3.5">
+        <div class="relative flex items-center justify-center w-9 h-9 rounded-lg bg-slate-900 border border-slate-700/80 overflow-hidden shrink-0">
+          <img
+            src="/static/logo.png"
+            alt="SentinelTrap Logo"
+            class="w-7 h-7 object-contain"
+            onerror="this.style.display='none'; document.getElementById('logo-svg-fallback').classList.remove('hidden');"
+          />
+          <svg
+            id="logo-svg-fallback"
+            class="hidden w-5 h-5 text-orange-500"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <circle cx="12" cy="11" r="2.5" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-semibold tracking-tight text-slate-100 text-base">SentinelTrap</span>
+            <span class="text-[10px] font-mono-code uppercase px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Demo version</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block" data-i18n="appSubtitle">
+            Threat Intelligence Honeypot &amp; Global Attack Surface Observer
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Telemetry Status Bar, Listener Ports, Uptime & i18n Switcher -->
+      <div class="flex items-center gap-3 sm:gap-5">
+        <!-- Active Honeypot Ports -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/90 border border-slate-800 text-xs">
+          <span class="text-slate-400 font-medium" data-i18n="listenersLabel">ACTIVE LISTENERS</span>
+          <span class="text-slate-700">|</span>
+          <span class="font-mono-code text-slate-200">SSH :2222</span>
+          <span class="text-slate-700">·</span>
+          <span class="font-mono-code text-slate-200">HTTP-API :8080</span>
+        </div>
+
+        <!-- Live Sensor Status Indicator -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/90 border border-slate-800">
+          <span id="status-dot" class="h-2 w-2 rounded-full bg-emerald-500"></span>
+          <span id="status-text" class="text-xs font-semibold tracking-wider text-emerald-400 font-mono-code">SENSOR LIVE</span>
+        </div>
+
+        <!-- Server Uptime Counter -->
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded bg-slate-900/90 border border-slate-800 text-xs">
+          <span class="text-slate-400 font-medium" data-i18n="uptimeLabel">UPTIME</span>
+          <span id="uptime-value" class="font-mono-code text-slate-200 font-medium">00:00:00</span>
+        </div>
+
+        <!-- Language Selector (EN | ID) -->
+        <div class="flex items-center bg-slate-900 p-0.5 rounded border border-slate-800" role="group" aria-label="Language Switcher">
+          <button id="lang-btn-en" type="button" class="px-2.5 py-1 text-xs font-semibold rounded bg-slate-800 text-slate-100 border border-slate-700">
+            EN
+          </button>
+          <button id="lang-btn-id" type="button" class="px-2.5 py-1 text-xs font-medium rounded text-slate-400 hover:text-slate-200">
+            ID
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Command Workspace -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-5 py-5 space-y-5">
+
+    <!-- 4 Key Performance & Threat Telemetry Metric Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      
+      <!-- Card 1: Total Ingestion Events -->
+      <div class="enterprise-card p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider" data-i18n="kpiTotalEventsTitle">Total Ingestion Events</span>
+          <span class="text-xs font-mono-code text-slate-500">TCP/2222 + 8080</span>
+        </div>
+        <div class="my-2 flex items-baseline gap-2">
+          <span id="kpi-total-events" class="text-2xl font-semibold font-mono-code text-slate-100">0</span>
+        </div>
+        <p class="text-[11px] text-slate-500" data-i18n="kpiTotalEventsSub">Cumulative honeypot packets &amp; sessions captured</p>
+      </div>
+
+      <!-- Card 2: Unique Origin IPs -->
+      <div class="enterprise-card p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider" data-i18n="kpiUniqueIpsTitle">Unique Origin IPs</span>
+          <span class="text-xs font-mono-code text-slate-500">IPv4 / ASN</span>
+        </div>
+        <div class="my-2 flex items-baseline gap-2">
+          <span id="kpi-unique-ips" class="text-2xl font-semibold font-mono-code text-slate-100">0</span>
+        </div>
+        <p class="text-[11px] text-slate-500" data-i18n="kpiUniqueIpsSub">Distinct adversarial IPv4 sources fingerprinted</p>
+      </div>
+
+      <!-- Card 3: High-Severity Breaches -->
+      <div class="enterprise-card p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider" data-i18n="kpiCriticalTitle">High-Severity Breaches</span>
+          <span class="px-1.5 py-0.5 text-[10px] font-mono-code rounded bg-red-500/10 text-red-400 border border-red-500/20">SEV-1</span>
+        </div>
+        <div class="my-2 flex items-baseline gap-2">
+          <span id="kpi-critical-breaches" class="text-2xl font-semibold font-mono-code text-red-400">0</span>
+        </div>
+        <p class="text-[11px] text-slate-500" data-i18n="kpiCriticalSub">Critical SQLi, RCE, LFI &amp; botnet dropper payloads</p>
+      </div>
+
+      <!-- Card 4: Average Request Entropy -->
+      <div class="enterprise-card p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider" data-i18n="kpiEntropyTitle">Average Request Entropy</span>
+          <span class="text-xs font-mono-code text-slate-500">SHANNON H(X)</span>
+        </div>
+        <div class="my-2 flex items-baseline gap-2">
+          <span id="kpi-avg-entropy" class="text-2xl font-semibold font-mono-code text-amber-400">0.00 b/B</span>
+        </div>
+        <p class="text-[11px] text-slate-500" data-i18n="kpiEntropySub">Mean Shannon entropy (bits/byte) across payloads</p>
+      </div>
+
+    </section>
+
+    <!-- Geographic Attack Surface Map & Origin Analytics Grid -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      
+      <!-- Flat Monochromatic World Projection Map (8 cols) -->
+      <div class="lg:col-span-8 enterprise-card flex flex-col overflow-hidden">
+        <div class="enterprise-card-header px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-semibold text-slate-100" data-i18n="mapHeaderTitle">Global Attack Surface Projection</h2>
+            <p class="text-xs text-slate-400" data-i18n="mapHeaderSubtitle">Equirectangular WGS84 coordinate telemetry — active adversarial origins</p>
+          </div>
+          <!-- Map Legend -->
+          <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-300">
+            <span class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-red-500"></span>
+              <span data-i18n="mapLegendCritical">Critical Exploit (RCE / SQLi / LFI)</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+              <span data-i18n="mapLegendMedium">Medium Probe (Brute-Force / Recon)</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+              <span data-i18n="mapSensorLabel">Honeypot Collector Node</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="map-viewport w-full h-[340px] sm:h-[380px] relative">
+          <canvas id="threat-map-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+          <div id="map-tooltip" class="hidden absolute pointer-events-none z-20 bg-slate-900/95 border border-slate-700 rounded px-2.5 py-2 shadow-lg"></div>
+        </div>
+      </div>
+
+      <!-- Right Telemetry Distribution Panels (4 cols) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        
+        <!-- Top Source Jurisdictions -->
+        <div class="enterprise-card flex-1 flex flex-col">
+          <div class="enterprise-card-header px-4 py-3 flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-300" data-i18n="topOriginsTitle">Top Source Jurisdictions</h3>
+            <span class="text-[11px] font-mono-code text-slate-500">GEOIP-ASN</span>
+          </div>
+          <div id="top-origins-list" class="p-4 space-y-3 flex-1"></div>
+        </div>
+
+        <!-- Protocol Split -->
+        <div class="enterprise-card flex flex-col">
+          <div class="enterprise-card-header px-4 py-2.5 flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-300" data-i18n="protocolSplitTitle">Protocol Telemetry Split</h3>
+            <span class="text-[11px] font-mono-code text-slate-500">L4/L7</span>
+          </div>
+          <div id="protocol-split-container" class="p-4 space-y-3"></div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Action Bar & Real-Time Forensic Filter Controls -->
+    <section class="enterprise-card p-3.5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+      
+      <!-- Search & Filter Selectors -->
+      <div class="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <div class="relative flex-1 max-w-md">
+          <input
+            id="filter-search"
+            type="text"
+            data-i18n-placeholder="filterSearchPlaceholder"
+            placeholder="Filter by IP, PTR, payload, credentials, or country..."
+            class="w-full bg-slate-900/90 border border-slate-700/80 rounded px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-slate-500"
+          />
+        </div>
+
+        <select
+          id="filter-severity"
+          aria-label="Filter by severity"
+          class="bg-slate-900/90 border border-slate-700/80 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-slate-500"
+        >
+          <option value="all" data-i18n="filterAllSeverities">All Severities</option>
+          <option value="Critical" data-i18n="filterCriticalOnly">Critical</option>
+          <option value="Medium" data-i18n="filterMediumOnly">Medium</option>
+          <option value="Low" data-i18n="filterLowOnly">Low</option>
+        </select>
+
+        <select
+          id="filter-protocol"
+          aria-label="Filter by protocol"
+          class="bg-slate-900/90 border border-slate-700/80 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-slate-500"
+        >
+          <option value="all" data-i18n="filterAllProtocols">All Protocols</option>
+          <option value="SSH">SSH / 2222</option>
+          <option value="HTTP">HTTP-API / 8080</option>
+        </select>
+      </div>
+
+      <!-- Action Buttons: Export JSON, Export STIX CSV, Simulate Burst, Clear DB -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          id="btn-simulate-burst"
+          type="button"
+          class="px-3 py-1.5 rounded text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+          data-i18n="actionSimulateBurst"
+        >
+          Inject Test Burst (+5)
+        </button>
+
+        <button
+          id="btn-export-json"
+          type="button"
+          class="px-3 py-1.5 rounded text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition"
+          data-i18n="actionExportJson"
+        >
+          Export JSON
+        </button>
+
+        <button
+          id="btn-export-csv"
+          type="button"
+          class="px-3 py-1.5 rounded text-xs font-medium bg-orange-600/90 hover:bg-orange-500 text-white border border-orange-500/40 transition"
+          data-i18n="actionExportCsv"
+        >
+          Export CSV (STIX compliant)
+        </button>
+
+        <button
+          id="btn-clear-db"
+          type="button"
+          class="px-3 py-1.5 rounded text-xs font-medium bg-red-950/60 hover:bg-red-900/70 text-red-300 border border-red-800/60 transition"
+          data-i18n="actionClearDb"
+        >
+          Clear Database
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Real-Time Forensic Telemetry Table -->
+    <section class="enterprise-card overflow-hidden">
+      <div class="enterprise-card-header px-4 py-3 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-semibold text-slate-100" data-i18n="tableHeaderTitle">Real-Time Forensic Telemetry Stream</h2>
+          <p class="text-xs text-slate-400" data-i18n="tableHeaderSub">Live packet &amp; session inspection captured on ports 2222 (SSH) and 8080 (HTTP-API)</p>
+        </div>
+        <span id="table-row-count" class="font-mono-code text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">0 rows</span>
+      </div>
+
+      <div class="overflow-x-auto max-h-[460px]">
+        <table class="w-full text-left border-collapse">
+          <thead class="sticky top-0 z-10 bg-[#0d131f] border-b border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <tr>
+              <th class="px-3.5 py-2.5" data-i18n="colTimestamp">Timestamp (UTC)</th>
+              <th class="px-3.5 py-2.5" data-i18n="colSourceIp">Source IP &amp; Reverse PTR</th>
+              <th class="px-3.5 py-2.5" data-i18n="colGeo">Geo / Jurisdiction</th>
+              <th class="px-3.5 py-2.5" data-i18n="colProtocol">Targeted Protocol</th>
+              <th class="px-3.5 py-2.5" data-i18n="colPayload">Credentials &amp; Captured Payload</th>
+              <th class="px-3.5 py-2.5 text-right" data-i18n="colEntropy">Entropy</th>
+              <th class="px-3.5 py-2.5 text-right" data-i18n="colSeverity">Severity</th>
+            </tr>
+          </thead>
+          <tbody id="forensic-table-body" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Subtle Notification Toast -->
+  <div id="toast-notification" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-2.5 rounded shadow-xl text-xs font-medium flex items-center gap-2">
+    <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+    <span id="toast-message">Action completed.</span>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

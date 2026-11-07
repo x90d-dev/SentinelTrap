@@ -1,0 +1,119 @@
+:root {
+  --bg-canvas: #09090b;
+  --bg-surface: #0f172a;
+  --bg-elevated: #1e293b;
+  --border-subtle: #1e293b;
+  --border-strong: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-orange: #f97316;
+  --accent-red: #ef4444;
+  --accent-emerald: #10b981;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+.font-mono-code {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-feature-settings: "zero" 1, "ss01" 1;
+}
+
+/* Subtle enterprise surface cards (zero neon/cyberpunk glow) */
+.enterprise-card {
+  background-color: #0c1017;
+  border: 1px solid #1e293b;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+.enterprise-card-header {
+  border-bottom: 1px solid #1e293b;
+  background-color: rgba(15, 23, 42, 0.45);
+}
+
+/* Custom sleek scrollbars for forensic log table */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Severity Badges - High contrast, flat enterprise style */
+.badge-critical {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.32);
+}
+
+.badge-medium {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.32);
+}
+
+.badge-low {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+/* Protocol Tag */
+.protocol-pill {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  color: #e4e4e7;
+}
+
+/* Table row hover & newly ingested highlight */
+.forensic-row {
+  transition: background-color 140ms ease;
+}
+
+.forensic-row:hover {
+  background-color: rgba(30, 41, 59, 0.55);
+}
+
+@keyframes rowFlash {
+  0% {
+    background-color: rgba(249, 115, 22, 0.18);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.row-new-flash {
+  animation: rowFlash 1.4s ease-out;
+}
+
+/* Map canvas container */
+.map-viewport {
+  position: relative;
+  background-color: #090d14;
+  overflow: hidden;
+}
